@@ -1,0 +1,17 @@
+{
+  "name": "vox2union",
+  "version": "1.0.0",
+  "description": "convert vox to union",
+  "main": "vox2union.js",
+  "preferGlobal": true,
+  "bin": "cli.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "JongChan Choi <jong@chan.moe>",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "nomnom": "^1.8.1"
+  }
+}
