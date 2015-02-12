@@ -124,14 +124,51 @@ parseVoxFile.api = {
     }
 };
 
-function vox2union(vox, name) {
+function vox2union(vox, name, option) {
     var union = {};
-    var palette = vox.colors;
+    var opt = {
+        fixCoord: option.fixCoord === undefined ? true : !!option.fixCoord,
+        centerXZ: option.centerXZ === undefined ? true : !!option.centerXZ,
+        centerY: option.centerY === undefined ? false : !!option.centerY
+    };
     union.name = name;
-    union.blockList = vox.xyzis.map(function (xyzi) {
+    {
+        var width = vox.width;
+        var height = vox.height;
+        var length = vox.length;
+        if (opt.fixCoord) {
+            var temp = height;
+            height = length;
+            length = height;
+        }
+        var halfWidth = width >> 1;
+        var halfHeight = height >> 1;
+        var halfLength = length >> 1;
+        var xyzis = vox.xyzis;
+        var palette = vox.colors;
+    }
+    union.blockList = xyzis.map(function (xyzi) {
+        var x, y, z;
+        if (opt.fixCoord) {
+            x = xyzi.x;
+            y = xyzi.z;
+            z = length - xyzi.y;
+        } else {
+            x = xyzi.x;
+            y = xyzi.y;
+            z = xyzi.z;
+        }
+        if (opt.centerXZ) {
+            x = x - halfWidth;
+            z = z - halfLength;
+        }
+        if (opt.centerY) {
+            y = y - halfHeight;
+        }
+        var color = palette[xyzi.i];
         return {
-            position: [xyzi.x, xyzi.y, xyzi.z],
-            color: palette[xyzi.i]
+            position: [x, y, z],
+            color: color
         };
     });
     union.unionList = [];

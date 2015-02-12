@@ -10,25 +10,40 @@
 <body>
     <h1>vox input</h1>
     <input type="file" id="vox-input"/>
+    <h2>option</h2>
+    <div><label><input type="checkbox" id="fix-coord" checked> fix coordinates system</label></div>
+    <div><label><input type="checkbox" id="center-xz" checked> center X, Z</label></div>
+    <div><label><input type="checkbox" id="center-y">          center Y</label></div>
     <h1>union output</h1>
     <textarea id="union-output" cols="40" rows="40"></textarea>
     <script type="text/javascript">
-    $('#vox-input').on('change', function (e) {
-        var file = e.target.files[0];
+    var file;
+    var vox;
+    function updateOutput() {
         if (!file) {
             $('#union-output').val('undefined');
             return;
         }
+        var option = {
+            fixCoord: $('#fix-coord').is(':checked'),
+            centerXZ: $('#center-xz').is(':checked'),
+            centerY: $('#center-y').is(':checked')
+        };
+        $('#union-output').val(JSON.stringify(
+            vox2union(vox, file.name, option), undefined, 4
+        ));
+    }
+    $('#vox-input').on('change', function (e) {
+        file = e.target.files[0];
         var reader = new FileReader;
         $(reader).on('load', function (e) {
             var voxArrayBuffer = e.target.result;
-            var vox = parseVoxFile(voxArrayBuffer);
-            $('#union-output').val(JSON.stringify(
-                vox2union(vox, file.name), undefined, 4
-            ));
+            vox = parseVoxFile(voxArrayBuffer);
+            updateOutput();
         });
         reader.readAsArrayBuffer(file);
     });
+    $('input[type=checkbox]').click(updateOutput);
     </script>
 </body>
 </html>
