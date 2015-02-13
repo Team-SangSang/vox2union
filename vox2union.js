@@ -127,9 +127,9 @@ parseVoxFile.api = {
 function vox2union(vox, name, option) {
     var union = {};
     var opt = {
-        fixCoord: option.fixCoord === undefined ? true : !!option.fixCoord,
-        centerXZ: option.centerXZ === undefined ? true : !!option.centerXZ,
-        centerY: option.centerY === undefined ? false : !!option.centerY
+        fixCoord: option && (option.fixCoord !== undefined) ? !!option.fixCoord : true,
+        centerXZ: option && (option.centerXZ !== undefined) ? !!option.centerXZ : true,
+        centerY: option && (option.centerY !== undefined) ? !!option.centerY : false
     };
     union.name = name;
     {
